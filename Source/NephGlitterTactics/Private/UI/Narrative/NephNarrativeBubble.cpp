@@ -1,1 +1,1 @@
-#include "NephNarrativeBubble.h"
+#include "UI/Narrative/NephNarrativeBubble.h"
