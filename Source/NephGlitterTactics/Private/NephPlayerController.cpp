@@ -12,8 +12,6 @@
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
 
-DEFINE_LOG_CATEGORY(LogTemplateCharacter);
-
 ANephPlayerController::ANephPlayerController()
 {
 	bShowMouseCursor = true;
@@ -53,10 +51,6 @@ void ANephPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Triggered, this, &ANephPlayerController::OnTouchTriggered);
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Completed, this, &ANephPlayerController::OnTouchReleased);
 		EnhancedInputComponent->BindAction(SetDestinationTouchAction, ETriggerEvent::Canceled, this, &ANephPlayerController::OnTouchReleased);
-	}
-	else
-	{
-		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input Component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
 

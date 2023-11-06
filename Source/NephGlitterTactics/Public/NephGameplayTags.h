@@ -1,7 +1,8 @@
 #pragma once
 
-class NephGameplayTags
+#include "NativeGameplayTags.h"
+
+namespace NephGameplayTags
 {
-public:
 	
 };

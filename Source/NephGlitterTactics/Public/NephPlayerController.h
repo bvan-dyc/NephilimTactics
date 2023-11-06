@@ -7,13 +7,6 @@
 #include "GameFramework/PlayerController.h"
 #include "NephPlayerController.generated.h"
 
-/** Forward declaration to improve compiling times */
-class UNiagaraSystem;
-class UInputMappingContext;
-class UInputAction;
-
-DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
-
 UCLASS()
 class ANephPlayerController : public APlayerController
 {
@@ -29,19 +22,19 @@ public:
 
 	/** FX Class that we will spawn when clicking */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UNiagaraSystem* FXCursor;
+	class UNiagaraSystem* FXCursor;
 
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputMappingContext* DefaultMappingContext;
+	class UInputMappingContext* DefaultMappingContext;
 	
 	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* SetDestinationClickAction;
+	class UInputAction* SetDestinationClickAction;
 
 	/** Jump Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* SetDestinationTouchAction;
+	class UInputAction* SetDestinationTouchAction;
 
 protected:
 	/** True if the controlled character should navigate to the mouse cursor. */
