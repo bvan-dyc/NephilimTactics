@@ -7,7 +7,7 @@
 #include "NephCharacter.generated.h"
 
 UCLASS(Blueprintable)
-class ANephCharacter : public ACharacter
+class NEPHGLITTERTACTICS_API ANephCharacter : public ACharacter
 {
 	GENERATED_BODY()
 

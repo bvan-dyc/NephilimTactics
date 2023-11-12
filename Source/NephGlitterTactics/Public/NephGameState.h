@@ -1,5 +1,3 @@
-// Copyright Limbic Entertainment GmbH, All Rights Reserved.
-
 #pragma once
 
 #include "CoreMinimal.h"

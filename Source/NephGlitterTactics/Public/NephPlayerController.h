@@ -8,7 +8,7 @@
 #include "NephPlayerController.generated.h"
 
 UCLASS()
-class ANephPlayerController : public APlayerController
+class NEPHGLITTERTACTICS_API ANephPlayerController : public APlayerController
 {
 	GENERATED_BODY()
 
@@ -32,30 +32,23 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* SetDestinationClickAction;
 
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	class UInputAction* SetDestinationTouchAction;
-
 protected:
-	/** True if the controlled character should navigate to the mouse cursor. */
-	uint32 bMoveToMouseCursor : 1;
-
+	
 	virtual void SetupInputComponent() override;
 	
 	// To add mapping context
-	virtual void BeginPlay();
+	virtual void BeginPlay() override;
 
 	/** Input handlers for SetDestination action. */
 	void OnInputStarted();
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
-	void OnTouchTriggered();
-	void OnTouchReleased();
 
-private:
+	/** True if the controlled character should navigate to the mouse cursor. */
+	uint32 bMoveToMouseCursor : 1;
+
 	FVector CachedDestination;
 
-	bool bIsTouch; // Is it a touch device
 	float FollowTime; // For how long it has been pressed
 };
 

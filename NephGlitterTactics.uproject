@@ -17,6 +17,11 @@
 				"GameplayStateTreeModule",
 				"GameplayAbilities"
 			]
+		},
+		{
+			"Name": "NephEditor",
+			"Type": "Editor",
+			"LoadingPhase": "Default"
 		}
 	],
 	"Plugins": [
@@ -26,6 +31,10 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "GameplayAbilities",
+			"Enabled": true
 		},
 		{
 			"Name": "CommonUI",
