@@ -27,11 +27,17 @@ public class NephGlitterTactics : ModuleRules
 	        "AdvancedWidgets",
 	        "NavigationSystem", 
 	        "AIModule",
+	        "ArcECS",
         });
         
         PublicDependencyModuleNames.AddRange(new string[]
         {
 	        "Flow",
         });
-    }
+
+        PrivateDependencyModuleNames.AddRange(new string[]
+        {
+	        
+        });
+	}
 }

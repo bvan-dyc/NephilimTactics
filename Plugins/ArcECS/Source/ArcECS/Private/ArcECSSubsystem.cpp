@@ -105,8 +105,7 @@ bool UArcECSSubsystem::DoesSupportWorldType(EWorldType::Type WorldType) const
 void UArcECSSubsystem::OnActorDestroyed(AActor* Actor)
 {
 	FArcCoreData* CoreData = Universe.GetResource<FArcCoreData>();
-	FArcEntityHandle* Entity = CoreData ? CoreData->EntitiesByActor.Find(Actor) : nullptr;
-	if (Entity)
+	if (FArcEntityHandle* Entity = CoreData ? CoreData->EntitiesByActor.Find(Actor) : nullptr)
 	{
 		Universe.DeleteEntity(*Entity);
 		CoreData->EntitiesByActor.Remove(Actor);
