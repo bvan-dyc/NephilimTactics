@@ -2,45 +2,59 @@
 
 #include "NephWorldSettings.h"
 #include "Board/NephTileData.h"
+#include "Board/Actor/NephTileActor.h"
 
 ANephBoardActor::ANephBoardActor()
 {
+	PrimaryActorTick.bCanEverTick = false;
+
+	USceneComponent* SceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("SceneComponent"));
+	RootComponent = SceneComponent;
+	SetRootComponent(RootComponent);
 	
+	CollisionPlane = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("CollisionPlane"));
+	CollisionPlane->SetupAttachment(GetRootComponent());
+	CollisionPlane->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	CollisionPlane->SetCollisionResponseToAllChannels(ECR_Block);
+}
+
+void ANephBoardActor::SetupCollisionPlane() const
+{
+	if (!CollisionPlane) { return; }
+
+	const FVector PlaneLocation = FVector(
+		(GridSizeX * TileSize / 2) - TileSize / 2,
+		(GridSizeY * TileSize / 2) - TileSize / 2,
+		0.1);
+	
+	CollisionPlane->SetRelativeLocation(PlaneLocation);
+	CollisionPlane->SetWorldScale3D(FVector(GridSizeX, GridSizeY, 1.0f));
+	CollisionPlane->SetVisibility(bShowCollisionPlane);
 }
 
 void ANephBoardActor::GenerateBoard()
 {
 	const UWorld* World = GetWorld();
 	if (!World) { return; }
+
+	GetDataFromTileActor();
+
+	SetupCollisionPlane();
 	
 	const FVector& Center = GetActorLocation();
 	BoardCenterLocation = Center;
-	
-	TileCountX = GridSizeX;
-	TileCountY = GridSizeY;
 
-	const float startTileX = (Center.X - ((TileCountX / 2) * TileSize));
-	const float startTileY = (Center.Y - ((TileCountY / 2) * TileSize));
-
-	FCollisionQueryParams traceParams;
-	traceParams.bTraceComplex = false;
-	traceParams.MobilityType = EQueryMobilityType::Static;
-	
-	BoardGrid.AddZeroed(TileCountX * TileCountY);
-	for (int32 x = 0; x < TileCountX; ++x)
+	BoardGrid.AddZeroed(GridSizeX * GridSizeY);
+	for (int32 x = 0; x < GridSizeX; ++x)
 	{
-		const float TileLocationX = startTileX + (x * TileSize) + (TileSize / 2.f);
-
-		for (int32 y = 0; y < TileCountY; ++y)
+		for (int32 y = 0; y < GridSizeY; ++y)
 		{
-			const float TileLocationY = startTileY + (y * TileSize) + (TileSize / 2.f);
-
-			const int32 index = x + (y * TileCountX);
+			const int32 index = x + (y * GridSizeX);
 			BoardGrid[index] = FNephTileData(x, y);
+
+			SpawnTileAtLocation(GetCellLocation(x, y));
 		}
 	}
-	
-	DrawBoard();
 }
 
 void ANephBoardActor::DrawBoard() const
@@ -54,9 +68,9 @@ void ANephBoardActor::DrawBoard() const
 	//const FBoxSphereBounds& bounds = GetBounds();
 	const float gridHeight = GetActorLocation().Z;//bounds.BoxExtent.Z;
 
-	for (int32 x = 0; x < TileCountX; ++x)
+	for (int32 x = 0; x < GridSizeX; ++x)
 	{
-		for (int32 y = 0; y < TileCountY; ++y)
+		for (int32 y = 0; y < GridSizeY; ++y)
 		{
 			FColor cellColor = FColor::Yellow;
 
@@ -69,11 +83,11 @@ void ANephBoardActor::DrawBoard() const
 
 const FNephTileData& ANephBoardActor::GetCellAtLocationClamped(const FVector& location) const
 {
-	const float startCellX = (BoardCenterLocation.X - ((TileCountX / 2) * TileSize));
-	const float startCellY = (BoardCenterLocation.Y - ((TileCountY / 2) * TileSize));
-	const int32 cellX = FMath::Clamp(FMath::FloorToInt((location.X - startCellX) / TileSize), 0, TileCountX - 1);
-	const int32 cellY = FMath::Clamp(FMath::FloorToInt((location.Y - startCellY) / TileSize), 0, TileCountY - 1);
-	const int32 index = (cellX + (cellY * TileCountX));
+	const float startCellX = (BoardCenterLocation.X - ((GridSizeX / 2) * TileSize));
+	const float startCellY = (BoardCenterLocation.Y - ((GridSizeY / 2) * TileSize));
+	const int32 cellX = FMath::Clamp(FMath::FloorToInt((location.X - startCellX) / TileSize), 0, GridSizeX - 1);
+	const int32 cellY = FMath::Clamp(FMath::FloorToInt((location.Y - startCellY) / TileSize), 0, GridSizeY - 1);
+	const int32 index = (cellX + (cellY * GridSizeX));
 	return BoardGrid[index];
 }
 
@@ -89,17 +103,38 @@ FVector ANephBoardActor::GetCellLocation(int32 x, int32 y) const
 	const float cellExtent = TileSize / 2.f;
 	return FVector((x * TileSize) + cellExtent, (y * TileSize) + cellExtent, 0.f) + 
 		FVector(BoardCenterLocation.X, BoardCenterLocation.Y, 0.f) - 
-		FVector(TileCountX * cellExtent, TileCountY * cellExtent, 0.f);
+		FVector(GridSizeX * cellExtent, GridSizeY * cellExtent, 0.f);
 }
 
 FIntPoint ANephBoardActor::GetCellCoordinatesAtLocation(const FVector& location) const
 {
 	if (!ensure(TileSize > 0)) { return FIntPoint(INDEX_NONE, INDEX_NONE); }
 
-	const float startCellX = (BoardCenterLocation.X - ((TileCountX / 2) * TileSize));
-	const float startCellY = (BoardCenterLocation.Y - ((TileCountY / 2) * TileSize));
+	const float startCellX = (BoardCenterLocation.X - ((GridSizeX / 2) * TileSize));
+	const float startCellY = (BoardCenterLocation.Y - ((GridSizeY / 2) * TileSize));
 	const int32 cellX = FMath::FloorToInt((location.X - startCellX) / TileSize);
 	const int32 cellY = FMath::FloorToInt((location.Y - startCellY) / TileSize);
 
 	return FIntPoint(cellX, cellY);
+}
+
+void ANephBoardActor::GetDataFromTileActor()
+{
+	UWorld* World = GetWorld();
+	if (!World) { return; }
+	ANephTileActor* DefaultTileActor = World->SpawnActor<ANephTileActor>(DefaultTileClass, FVector::ZeroVector, FRotator::ZeroRotator);
+	DefaultTileActor->SetActorHiddenInGame(true);
+	
+	const UStaticMesh* TileMesh =  DefaultTileActor->GetHexMesh();
+	
+	TileSize = TileMesh ? TileMesh->GetBoundingBox().Max.X * 2: 100;
+}
+
+ANephTileActor* ANephBoardActor::SpawnTileAtLocation(const FVector& Location)
+{
+	UWorld* World = GetWorld();
+	if (!World) { return nullptr; }
+	ANephTileActor* DefaultTileActor = World->SpawnActor<ANephTileActor>(DefaultTileClass, Location, FRotator::ZeroRotator);
+	DefaultTileActor->AttachToActor(this, FAttachmentTransformRules::KeepRelativeTransform);
+	return DefaultTileActor;
 }

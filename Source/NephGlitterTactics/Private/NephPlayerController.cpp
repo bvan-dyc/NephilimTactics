@@ -29,6 +29,10 @@ void ANephPlayerController::BeginPlay()
 	}
 }
 
+void ANephPlayerController::OnMoveForwardTriggered(const FInputActionValue& InputActionValue)
+{
+}
+
 void ANephPlayerController::SetupInputComponent()
 {
 	// set up gameplay key bindings
@@ -42,6 +46,9 @@ void ANephPlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Triggered, this, &ANephPlayerController::OnSetDestinationTriggered);
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Completed, this, &ANephPlayerController::OnSetDestinationReleased);
 		EnhancedInputComponent->BindAction(SetDestinationClickAction, ETriggerEvent::Canceled, this, &ANephPlayerController::OnSetDestinationReleased);
+		
+		// Setup keyboard / controller events
+		EnhancedInputComponent->BindAction(MoveForwardAction, ETriggerEvent::Triggered, this, &ANephPlayerController::OnMoveForwardTriggered);
 	}
 }
 

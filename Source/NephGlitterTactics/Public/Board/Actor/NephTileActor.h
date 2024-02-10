@@ -12,5 +12,15 @@ class ANephTileActor : public AActor
 
 public:
 	
-	ANephTileActor() {}
+	ANephTileActor();
+
+	class UStaticMesh* GetHexMesh() const { return TileMeshComponent ? TileMeshComponent->GetStaticMesh() : nullptr; }
+
+private:
+
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<UStaticMesh> HexMesh;
+	
+	UPROPERTY(EditAnywhere)
+	TObjectPtr<class UStaticMeshComponent> TileMeshComponent;
 };

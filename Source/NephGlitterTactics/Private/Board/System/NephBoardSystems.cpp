@@ -23,18 +23,11 @@ void FNephBoardSystems::GenerateBoard(const UWorld* World, const FArcRes<FNephBo
 	Board->TileCountX = 20;
 	Board->TileCountY = 20;
 
-	const float startTileX = (Center.X - ((Board->TileCountX / 2) * Board->TileSize));
-	const float startTileY = (Center.Y - ((Board->TileCountY / 2) * Board->TileSize));
-
 	Board->Board.AddZeroed(Board->TileCountX * Board->TileCountY);
 	for (int32 x = 0; x < Board->TileCountX; ++x)
 	{
-		const float TileLocationX = startTileX + (x * Board->TileSize) + (Board->TileSize / 2.f);
-
 		for (int32 y = 0; y < Board->TileCountY; ++y)
 		{
-			const float TileLocationY = startTileY + (y * Board->TileSize) + (Board->TileSize / 2.f);
-
 			const int32 index = x + (y * Board->TileCountX);
 			
 			FNephTileData* NephTileData = &Board->Board[index];
