@@ -1,7 +1,7 @@
 #include "ArcEntityBuilder.h"
 #include "ArcUniverse.h"
 #include "ArcCommands.h"
-#include "Units/Actor/NephUnitPawn.h"
+#include "Units/Actor/NephCharacter.h"
 #include "Units/ActorComponent/NephCharacterComponent.h"
 #include "Units/Resource/NephUnitsEvents.h"
 
@@ -13,7 +13,7 @@ UNephCharacterComponent::UNephCharacterComponent()
 
 void UNephCharacterComponent::AddComponentsToEntity(FArcUniverse& Universe, FArcEntityHandle& Entity)
 {
-    ANephUnitPawn* Character = Cast<ANephUnitPawn>(GetOwner());
+    ANephCharacter* Character = Cast<ANephCharacter>(GetOwner());
     if (!Character || !ensure(Universe.IsValid(Entity))) { return; }
     
     Universe.GetCommands().AddComponent(Entity, FNephUnitData(Data));

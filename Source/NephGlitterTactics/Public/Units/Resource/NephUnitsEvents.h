@@ -5,5 +5,5 @@
 
 struct NEPHGLITTERTACTICS_API FNephUnitsEvents
 {
-	TArray<TPair<FArcEntityHandle, TWeakObjectPtr<class ANephUnitPawn>>> CharacterCreatedEvents;
+	TArray<TPair<FArcEntityHandle, TWeakObjectPtr<class ANephCharacter>>> CharacterCreatedEvents;
 };

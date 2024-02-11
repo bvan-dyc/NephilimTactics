@@ -14,7 +14,6 @@ void ANephHUD::BeginPlay()
 	}
 }
 
-
 UNephGameHUD* ANephHUD::GetHUDWidget() const
 {
 	return GameHUD;
