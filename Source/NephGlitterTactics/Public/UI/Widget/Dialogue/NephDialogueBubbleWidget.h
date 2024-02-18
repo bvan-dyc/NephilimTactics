@@ -13,7 +13,7 @@ class NEPHGLITTERTACTICS_API UNephDialogueBubbleWidget : public UUserWidget
 
 public:
 
-   //void ShowMessage(const UNepDialogueDataAsset* dialoguec/*const struct FNepDialogueData& dialogueData*/);
+    void ShowDialogue(const struct FNephDialogueData* dialogue);
     void SetTitle(const FText& title) const;
     void SetDialogue(const FText& dialogue) const;
     void SetImage(UTexture2D* image) const;

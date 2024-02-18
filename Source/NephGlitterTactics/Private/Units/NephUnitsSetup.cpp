@@ -17,8 +17,6 @@ void FNepUnitsSetup::SetupForEditor(FArcUniverse& Universe, FArcScheduleBuilder&
 {
 	Universe.AddResource(FNephUnitsEvents());
 	
-	Universe.AddResource(FNephUnitsEvents());
-	
 	TickScheduleBuilder
 		.AddSystemToStage(TEXT("Nephilim_EventCleanUpStage"), &FNephUnitsSystems::ClearEvents);
 }

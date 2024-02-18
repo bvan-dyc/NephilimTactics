@@ -2,9 +2,10 @@
 
 #include "CommonTextBlock.h"
 #include "Components/Image.h"
+#include "Narrative/NephDialogueData.h"
+#include "Narrative/DataAssets/NephSpeakerDataAsset.h"
 
-/**
-void UNepDialogueBubbleWidget::ShowMessage(const UNepDialogueDataAsset* dialogue)
+void UNephDialogueBubbleWidget::ShowDialogue(const FNephDialogueData* dialogue)
 {
 	SetVisibility(dialogue ? ESlateVisibility::SelfHitTestInvisible : ESlateVisibility::Hidden);
 
@@ -14,14 +15,14 @@ void UNepDialogueBubbleWidget::ShowMessage(const UNepDialogueDataAsset* dialogue
 	}
 	if (Content)
 	{
-		Content->SetText(dialogue->Text);
+		Content->SetText(dialogue->DialogueTextContent);
 	}
 	if (SpeakerImage)
 	{
-		SpeakerImage->SetBrushFromTexture(dialogue->Speaker ? dialogue->Speaker->CharacterImage : nullptr);
+		SpeakerImage->SetBrushFromTexture(dialogue->Speaker ? dialogue->Speaker->SpeakerImage : nullptr);
 	}
 }
-*/
+
 void UNephDialogueBubbleWidget::SetTitle(const FText& title) const
 {
 	if (Title)

@@ -17,7 +17,7 @@ FNephTileData* FNephBoard::GetTileWithCoordinates(const FIntPoint& Point)
 {
 	for (FNephTileData& Tile : Board)
 	{
-		if (Tile.Coordinates == Point)
+		if (Tile.TileCoordinates == Point)
 		{
 			return &Tile;
 		}
@@ -54,6 +54,14 @@ FVector FNephBoard::GetTileWorldLocation(int32 X, int32 Y) const
 	return FVector((X * TileSize) + cellExtent, (Y * TileSize) + cellExtent, 0.f) + 
         FVector(BoardCenterLocation.X, BoardCenterLocation.Y, 0.f) - 
         FVector(TileCountX * cellExtent, TileCountY * cellExtent, 0.f);
+}
+
+FVector FNephBoard::GetLocationAtTileCoordinates(FIntPoint Coordinates) const
+{
+	const float cellExtent = TileSize / 2.f;
+	return FVector((Coordinates.X * TileSize) + cellExtent, (Coordinates.Y * TileSize) + cellExtent, 0.f) + 
+		FVector(BoardCenterLocation.X, BoardCenterLocation.Y, 0.f) - 
+		FVector(TileCountX * cellExtent, TileCountY * cellExtent, 0.f);
 }
 
 FVector FNephBoard::GetTileWorldLocationFromPoint(const FIntPoint& Point) const

@@ -12,4 +12,6 @@ struct FNephUnitData
 public:
 
 	~FNephUnitData();
+
+	TWeakObjectPtr<class ANephCharacter> UnitActor;
 };

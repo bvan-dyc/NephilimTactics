@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "NephFlowNode.h"
-#include "Narrative/NephSpeakerDataAsset.h"
+#include "Narrative/DataAssets/NephSpeakerDataAsset.h"
 #include "NephFlowNodePlayDialogue.generated.h"
 
 UCLASS(NotBlueprintable, meta = (DisplayName = "Play Dialogue"))

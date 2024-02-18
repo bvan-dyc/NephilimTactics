@@ -21,7 +21,7 @@ void FNephBoardSetup::SetupForEditor(FArcUniverse& Universe, FArcScheduleBuilder
 {
 	Universe.AddResource(FNephBoardEvents());
 	Universe.AddResource(FNephBoard());
-
+	
 	InitScheduleBuilder
 		.AddSystem(&FNephBoardSystems::BuildBoard);
 	

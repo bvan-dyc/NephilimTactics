@@ -1,8 +1,10 @@
 #include "Board/Actor/NephBoardActor.h"
 
+#include "ArcECSSubsystem.h"
 #include "NephWorldSettings.h"
 #include "Board/NephTileData.h"
 #include "Board/Actor/NephTileActor.h"
+#include "Board/Resource/NephBoardEvents.h"
 
 ANephBoardActor::ANephBoardActor()
 {
@@ -16,6 +18,13 @@ ANephBoardActor::ANephBoardActor()
 	CollisionPlane->SetupAttachment(GetRootComponent());
 	CollisionPlane->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	CollisionPlane->SetCollisionResponseToAllChannels(ECR_Block);
+
+	UArcECSSubsystem* CoreSubsystem = UWorld::GetSubsystem<UArcECSSubsystem>(GetWorld());
+	FArcUniverse* Universe = CoreSubsystem ? &CoreSubsystem->GetUniverse() : nullptr;
+	if (FNephBoardEvents* BoardEvents = Universe ? Universe->GetResource<FNephBoardEvents>() : nullptr)
+	{
+		BoardEvents->BoardCreatedEvents.Emplace(this);
+	}
 }
 
 void ANephBoardActor::SetupCollisionPlane() const
@@ -37,6 +46,13 @@ void ANephBoardActor::GenerateBoard()
 	const UWorld* World = GetWorld();
 	if (!World) { return; }
 
+	UArcECSSubsystem* CoreSubsystem = UWorld::GetSubsystem<UArcECSSubsystem>(GetWorld());
+	FArcUniverse* Universe = CoreSubsystem ? &CoreSubsystem->GetUniverse() : nullptr;
+	if (FNephBoardEvents* BoardEvents = Universe ? Universe->GetResource<FNephBoardEvents>() : nullptr)
+	{
+		BoardEvents->bRegenerateBoardCommand = true;
+	}
+	
 	GetDataFromTileActor();
 
 	SetupCollisionPlane();

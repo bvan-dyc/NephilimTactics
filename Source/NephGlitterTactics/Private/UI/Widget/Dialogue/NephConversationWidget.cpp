@@ -12,8 +12,8 @@ void UNephConversationWidget::FillWithData(const FText& speakerName, const FText
 		DialogueBubbleWidget->SetImage(speaker);
 	}
 }
-/**
-void UNephConversationWidget::StartDialogue(const UNepDialogueDataAsset* dialogue) const
+
+void UNephConversationWidget::StartDialogue(const FNephDialogueData* dialogue) const
 {
 	if (!dialogue)
 	{
@@ -27,10 +27,10 @@ void UNephConversationWidget::StartDialogue(const UNepDialogueDataAsset* dialogu
 	
 	if (DialogueBubbleWidget)
 	{
-		DialogueBubbleWidget->ShowMessage(dialogue);
+		DialogueBubbleWidget->ShowDialogue(dialogue);
 	}
 }
-*/
+
 void UNephConversationWidget::EndConversation() const
 {
 	if (DialogueBubbleWidget)

@@ -2,15 +2,15 @@
 
 #include "Board/Resource/NephBoard.h"
 #include "Board/NephTileData.h"
+#include "Board/Actor/NephBoardActor.h"
 #include "Board/Resource/NephBoardEvents.h"
 #include "Resource/ArcCoreData.h"
 
-void FNephBoardSystems::BuildBoard(FArcRes<FArcCoreData> CoreData, FArcRes<FNephBoard> Board)
+void FNephBoardSystems::HandleBoardCreatedEvent(FArcRes<FArcCoreData> CoreData, FArcRes<FNephBoard> Board, FArcRes<FNephBoardEvents> BoardEvents)
 {
-	const UWorld* World = CoreData->World.Get();
-	if (!World) { return; }
-
-	GenerateBoard(World, Board);
+	if (BoardEvents->BoardCreatedEvents.Num() < 1) { return; }
+	
+	
 }
 
 void FNephBoardSystems::GenerateBoard(const UWorld* World, const FArcRes<FNephBoard>& Board)
@@ -31,8 +31,8 @@ void FNephBoardSystems::GenerateBoard(const UWorld* World, const FArcRes<FNephBo
 			const int32 index = x + (y * Board->TileCountX);
 			
 			FNephTileData* NephTileData = &Board->Board[index];
-			NephTileData->Coordinates.X = x;
-			NephTileData->Coordinates.Y = y;
+			NephTileData->TileCoordinates.X = x;
+			NephTileData->TileCoordinates.Y = y;
 		}
 	}
 	
@@ -44,7 +44,6 @@ void FNephBoardSystems::DrawBoard(const UWorld* World, const FArcRes<FNephBoard>
 	const FVector cellExtent = FVector(Board->TileSize / 2.f, Board->TileSize / 2.f, 0.f);
 
 	const float gridHeight = 0;
-
 	for (int32 x = 0; x < Board->TileCountX; ++x)
 	{
 		for (int32 y = 0; y < Board->TileCountY; ++y)

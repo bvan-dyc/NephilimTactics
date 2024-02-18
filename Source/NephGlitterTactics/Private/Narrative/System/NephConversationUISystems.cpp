@@ -1,8 +1,6 @@
 #include "Narrative\System\NephConversationUISystems.h"
 
 #include "Narrative/Resource/NephNarrativeEvents.h"
-#include "UI/Widget/Dialogue/NephConversationWidget.h"
-#include "UI/Widget/Dialogue/NephCutsceneConversationWidget.h"
 
 void FNephConversationUISystems::ConversationPanelTick(FArcRes<FNephWidgetData> WidgetData, FArcRes<FNephNarrativeEvents> NarrativeEvents)
 {

@@ -1,6 +1,5 @@
 ﻿#include "Narrative/NephNarrativeSetup.h"
 #include "ArcUniverse.h"
-#include "ArcScheduleBuilder.h"
 #include "Narrative/Resource/NephNarrativeEvents.h"
 
 void FNephNarrativeSetup::Setup(FArcUniverse& Universe, FArcScheduleBuilder& InitScheduleBuilder, FArcScheduleBuilder& TickScheduleBuilder)

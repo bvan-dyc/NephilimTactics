@@ -5,5 +5,7 @@
 
 struct NEPHGLITTERTACTICS_API FNephBoardEvents
 {
-	TArray<TPair<FArcEntityHandle, TWeakObjectPtr<class ANephBoardActor>>> BoardCreatedEvents;
+	TArray<TWeakObjectPtr<class ANephBoardActor>> BoardCreatedEvents;
+	
+	bool bRegenerateBoardCommand = false;
 };

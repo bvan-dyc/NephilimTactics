@@ -11,7 +11,7 @@ class NEPHGLITTERTACTICS_API UNephConversationWidget : public UUserWidget
 
 public:
 	
-	//void StartDialogue(const UNepDialogueDataAsset* dialogue) const;
+	void StartDialogue(const struct FNephDialogueData* dialogue) const;
 	
 	void FillWithData(const FText& speakerName, const FText& dialogueText, UTexture2D* speaker) const;
 	void EndConversation() const;

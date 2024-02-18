@@ -94,3 +94,37 @@ void ANephPlayerController::OnSetDestinationReleased()
 
 	FollowTime = 0.f;
 }
+
+/**
+FIntVector ANephPlayerController::GetTileUnderCursor()
+{
+	const UWorld* World = GetWorld();
+	if (!World) { return; }
+
+	FHitResult CurrentHitResult;
+	GetHitResultUnderCursor(ECC_WorldStatic, false, CurrentHitResult);
+
+	const ASPHexagonGridActor* HexagonGridActor = FSPHexUtils::GetHexMap(World);
+	if (!HexagonGridActor) { return; }
+
+	const FIntVector NewCoordinates = FSPHexUtils::GetCoordinatesAtLocation(CurrentHitResult.Location, HexagonGridActor->GetTileOuterRadius());
+	
+	if (HexUnderCursorCoords != NewCoordinates)
+	{
+		OnCursorHexLocationChanged.Broadcast(FSPPlayerTileLocationChangedMessage(HexUnderCursorCoords, NewCoordinates));
+		
+		if (const ASPHexActorBase* NewHexUnderCursor = HexagonGridActor->GetTileAtCoordinates(NewCoordinates))
+		{
+			const ASPHexActorBase* PreviousHexUnderCursor = HexagonGridActor->GetTileAtCoordinates(HexUnderCursorCoords);
+			if (PreviousHexUnderCursor)
+			{
+				PreviousHexUnderCursor->OnCursorOverTileDelegate.ExecuteIfBound(false);
+			}
+			
+			HexUnderCursorCoords = NewCoordinates;
+
+			NewHexUnderCursor->OnCursorOverTileDelegate.ExecuteIfBound(true);
+		}
+	} 
+}
+**/
