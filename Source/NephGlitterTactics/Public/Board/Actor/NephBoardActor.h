@@ -13,8 +13,21 @@ class ANephBoardActor : public AActor
 public:
 	
 	ANephBoardActor();
-	
+
+	UPROPERTY(VisibleAnywhere)
+	TArray<struct FNephTileData> BoardTiles;
+
+	UPROPERTY(VisibleAnywhere)
+	float TileSize = 250.0f;
+
+	UPROPERTY(EditAnywhere)
+	int32 GridSizeX = 20;
+	UPROPERTY(EditAnywhere)
+	int32 GridSizeY = 20;
+
 private:
+
+	virtual void BeginPlay() override;
 	
 	void SetupCollisionPlane() const;
 	
@@ -24,26 +37,16 @@ private:
 	UFUNCTION(CallInEditor)
 	void DrawBoard() const;
 
-	int32 GetCellIndex(int32 x, int32 y) const { return x + (y * GridSizeX); };
+	int32 GetTileIndex(int32 x, int32 y) const { return x + (y * GridSizeX); };
 
-	FIntPoint GetCellCoordinatesAtLocation(const FVector& location) const;
+	FIntPoint GetTileCoordinatesAtLocation(const FVector& location) const;
 	void GetDataFromTileActor();
 	class ANephTileActor* SpawnTileAtLocation(const FVector& Location);
 
-	const struct FNephTileData&	GetCellAtLocationClamped(const FVector& location) const;
-	const struct FNephTileData*	FindCellAtLocation(const FVector& location) const;
-	FVector GetCellLocation(int32 x, int32 y) const;
-
-protected:
+	const struct FNephTileData&	GetTileAtLocationClamped(const FVector& location) const;
+	const struct FNephTileData*	FindTileAtLocation(const FVector& location) const;
+	FVector GetTileLocation(int32 x, int32 y) const;
 	
-	UPROPERTY(EditAnywhere, Category="Board", Meta = (ClampMin = "1"))
-	float TileSize = 250.0f;
-
-	int32 GridSizeX = 20;
-	int32 GridSizeY = 20;
-
-	TArray<FNephTileData> BoardGrid;
-
 	FVector BoardCenterLocation = FVector::ZeroVector;
 
 	UPROPERTY(EditAnywhere)

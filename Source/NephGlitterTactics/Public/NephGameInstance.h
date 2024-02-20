@@ -6,7 +6,7 @@
 #include "NephGameInstance.generated.h"
 
 UCLASS()
-class NEPHGLITTERTACTICS_API USPNephGameInstance : public UGameInstance
+class NEPHGLITTERTACTICS_API UNephGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 

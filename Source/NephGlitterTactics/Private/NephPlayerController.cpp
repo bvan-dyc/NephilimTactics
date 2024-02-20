@@ -7,6 +7,7 @@
 #include "Engine/World.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Camera/Actor/NephCameraActor.h"
 #include "Engine/LocalPlayer.h"
 
 ANephPlayerController::ANephPlayerController()
@@ -29,10 +30,6 @@ void ANephPlayerController::BeginPlay()
 	}
 }
 
-void ANephPlayerController::OnMoveForwardTriggered(const FInputActionValue& InputActionValue)
-{
-}
-
 void ANephPlayerController::SetupInputComponent()
 {
 	// set up gameplay key bindings
@@ -49,12 +46,35 @@ void ANephPlayerController::SetupInputComponent()
 		
 		// Setup keyboard / controller events
 		EnhancedInputComponent->BindAction(MoveForwardAction, ETriggerEvent::Triggered, this, &ANephPlayerController::OnMoveForwardTriggered);
+		EnhancedInputComponent->BindAction(MoveForwardAction, ETriggerEvent::Triggered, this, &ANephPlayerController::OnMoveRightTriggered);
 	}
 }
 
 void ANephPlayerController::OnInputStarted()
 {
 	StopMovement();
+}
+
+void ANephPlayerController::OnMoveForwardTriggered(const FInputActionValue& InputActionValue)
+{
+	APawn* ControlledPawn = GetPawn();
+	if (!ControlledPawn) { return; }
+
+	ANephCameraActor* Camera = Cast<ANephCameraActor>(ControlledPawn);
+	if (!Camera) { return; }
+
+	Camera->MoveForward(InputActionValue.GetMagnitude());
+}
+
+void ANephPlayerController::OnMoveRightTriggered(const FInputActionValue& InputActionValue)
+{
+	APawn* ControlledPawn = GetPawn();
+	if (!ControlledPawn) { return; }
+
+	ANephCameraActor* Camera = Cast<ANephCameraActor>(ControlledPawn);
+	if (!Camera) { return; }
+
+	Camera->MoveRight(InputActionValue.GetMagnitude());
 }
 
 // Triggered every frame when the input is held down
@@ -88,43 +108,7 @@ void ANephPlayerController::OnSetDestinationReleased()
 	if (FollowTime <= ShortPressThreshold)
 	{
 		// We move there and spawn some particles
-		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, CachedDestination);
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FXCursor, CachedDestination, FRotator::ZeroRotator, FVector(1.f, 1.f, 1.f), true, true, ENCPoolMethod::None, true);
-	}
+		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, CachedDestination);	}
 
 	FollowTime = 0.f;
 }
-
-/**
-FIntVector ANephPlayerController::GetTileUnderCursor()
-{
-	const UWorld* World = GetWorld();
-	if (!World) { return; }
-
-	FHitResult CurrentHitResult;
-	GetHitResultUnderCursor(ECC_WorldStatic, false, CurrentHitResult);
-
-	const ASPHexagonGridActor* HexagonGridActor = FSPHexUtils::GetHexMap(World);
-	if (!HexagonGridActor) { return; }
-
-	const FIntVector NewCoordinates = FSPHexUtils::GetCoordinatesAtLocation(CurrentHitResult.Location, HexagonGridActor->GetTileOuterRadius());
-	
-	if (HexUnderCursorCoords != NewCoordinates)
-	{
-		OnCursorHexLocationChanged.Broadcast(FSPPlayerTileLocationChangedMessage(HexUnderCursorCoords, NewCoordinates));
-		
-		if (const ASPHexActorBase* NewHexUnderCursor = HexagonGridActor->GetTileAtCoordinates(NewCoordinates))
-		{
-			const ASPHexActorBase* PreviousHexUnderCursor = HexagonGridActor->GetTileAtCoordinates(HexUnderCursorCoords);
-			if (PreviousHexUnderCursor)
-			{
-				PreviousHexUnderCursor->OnCursorOverTileDelegate.ExecuteIfBound(false);
-			}
-			
-			HexUnderCursorCoords = NewCoordinates;
-
-			NewHexUnderCursor->OnCursorOverTileDelegate.ExecuteIfBound(true);
-		}
-	} 
-}
-**/

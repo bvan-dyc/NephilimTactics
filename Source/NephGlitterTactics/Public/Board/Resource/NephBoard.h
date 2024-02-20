@@ -8,34 +8,33 @@ struct NEPHGLITTERTACTICS_API FNephBoard
 {
 public:
 	
-	TArray<struct FNephTileData> Board;
+	TArray<struct FNephTileData> BoardTiles;
 	
 	FVector2D BoardCenterLocation = FVector2D(0, 0);
 
 	float TileSize = 250.0f;
 
-	int32 TileCountX = 0;
-	int32 TileCountY = 0;
+	int32 TileCountX = 20;
+	int32 TileCountY = 20;
 
-	int32 GridSizeX = 20;
-	int32 GridSizeY = 20;
+	TWeakObjectPtr<class ANephBoardActor> BoardActor;
+	TWeakObjectPtr<class AActor> TileSelectorActor;
 
-	TWeakObjectPtr<class ANephBoardActor> GridActor;
-
+	FIntPoint SelectedTile = FIntPoint::ZeroValue;
+	
 public:
 	
 	// Utils
-	FIntPoint GetCellCoordinatesAtLocation(const FVector& Location) const;
-	int32 GetCellIndex(int32 x, int32 y) const;
-	int32 GetCellIndexFromPoint(const FIntPoint& Point) const;
+	FIntPoint GetTileCoordinatesAtLocation(const FVector& Location) const;
+	int32 GetTileIndexFromPoint(const FIntPoint& Point) const;
 	FNephTileData* GetTileWithCoordinates(const FIntPoint& Point);
 
-	const FNephTileData* GetCellAtLocationClamped(const FVector& Location) const;
-	const FNephTileData* FindCellAtLocation(const FVector& Location) const;
-	FVector GetTileWorldLocation(int32 X, int32 Y) const;
+	const FNephTileData* GetTileAtLocationClamped(const FVector& Location) const;
+	FNephTileData* FindTileAtLocation(const FVector& Location);
 	FVector GetLocationAtTileCoordinates(FIntPoint Coordinates) const;
 	
 	FVector GetTileWorldLocationFromPoint(const FIntPoint& Point) const;
 	
 	FVector GetTileSnapLocation(FIntPoint Coordinates) const { return GetLocationAtTileCoordinates(Coordinates); }
+	void InitFromActor(const ANephBoardActor* BoardActor);
 };

@@ -6,7 +6,7 @@
 #include "GameFramework/Character.h"
 #include "NephCharacter.generated.h"
 
-UCLASS(Blueprintable)
+UCLASS()
 class NEPHGLITTERTACTICS_API ANephCharacter : public ACharacter
 {
 	GENERATED_BODY()
@@ -26,6 +26,8 @@ public:
 
 	void MoveForward(float Value);
 	void MoveRight(float Value);
+
+	virtual void BeginPlay() override;
 	
 	/** Returns TopDownCameraComponent subobject **/
 	FORCEINLINE class UCameraComponent* GetTopDownCameraComponent() const { return TopDownCameraComponent; }

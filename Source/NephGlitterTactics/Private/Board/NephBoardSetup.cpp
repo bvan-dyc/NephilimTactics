@@ -9,11 +9,16 @@ void FNephBoardSetup::Setup(FArcUniverse& Universe, FArcScheduleBuilder& InitSch
 {
 	Universe.AddResource(FNephBoardEvents());
 	Universe.AddResource(FNephBoard());
-	
+	Universe.AddResource(FNephLevelGlobals());
+
 	InitScheduleBuilder
-		.AddSystem(&FNephBoardSystems::BuildBoard);
+		.AddSystem(&FNephBoardSystems::InitializeGlobals)
+		.AddSystemSeq(&FNephBoardSystems::InitBoardUI);
 	
 	TickScheduleBuilder
+		.AddSystem(&FNephBoardSystems::HandleBoardCreatedEvent)
+		.AddSystemSeq(&FNephBoardSystems::HandleHoverOverTileCommands)
+		.AddSystemSeq(&FNephBoardSystems::UpdateHoveredTile)
 		.AddSystemToStage(TEXT("Nephilim_EventCleanUpStage"), &FNephBoardSystems::ClearEvents);
 }
 
@@ -21,10 +26,12 @@ void FNephBoardSetup::SetupForEditor(FArcUniverse& Universe, FArcScheduleBuilder
 {
 	Universe.AddResource(FNephBoardEvents());
 	Universe.AddResource(FNephBoard());
-	
+	Universe.AddResource(FNephLevelGlobals());
+
 	InitScheduleBuilder
-		.AddSystem(&FNephBoardSystems::BuildBoard);
+		.AddSystem(&FNephBoardSystems::InitializeGlobals);
 	
 	TickScheduleBuilder
+		.AddSystem(&FNephBoardSystems::HandleBoardCreatedEvent)
 		.AddSystemToStage(TEXT("Nephilim_EventCleanUpStage"), &FNephBoardSystems::ClearEvents);
 }

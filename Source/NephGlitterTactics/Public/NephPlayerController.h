@@ -20,7 +20,8 @@ public:
 protected:
 	
 	void OnMoveForwardTriggered(const FInputActionValue& InputActionValue);
-	
+	void OnMoveRightTriggered(const FInputActionValue& InputActionValue);
+
 	virtual void SetupInputComponent() override;
 	
 	// To add mapping context
@@ -41,10 +42,6 @@ protected:
 	/** Time Threshold to know if it was a short press */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	float ShortPressThreshold;
-
-	/** FX Class that we will spawn when clicking */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	class UNiagaraSystem* FXCursor;
 
 	/** MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))

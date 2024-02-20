@@ -78,3 +78,10 @@ void ANephCharacter::MoveRight(float Value)
 		AddMovementInput(Direction, Value);
 	}
 }
+
+void ANephCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+
+	
+}
