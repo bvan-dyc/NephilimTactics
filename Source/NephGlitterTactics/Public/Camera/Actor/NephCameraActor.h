@@ -38,6 +38,6 @@ private:
 	UCapsuleComponent* CapsuleComponent;
 
 	UPROPERTY(EditAnywhere)
-	float CameraMoveSpeed = 500.f;
+	float CameraMoveSpeed = 50.f;
 };
 

@@ -10,6 +10,7 @@ void FNepUnitsSetup::Setup(FArcUniverse& Universe, FArcScheduleBuilder& InitSche
 	Universe.AddResource(FNephUnitsEvents());
 	
 	TickScheduleBuilder
+		.AddSystem(FNephUnitsSystems::SnapUnitsToBoard)
 		.AddSystemToStage(TEXT("Nephilim_EventCleanUpStage"), &FNephUnitsSystems::ClearEvents);
 }
 
@@ -18,5 +19,6 @@ void FNepUnitsSetup::SetupForEditor(FArcUniverse& Universe, FArcScheduleBuilder&
 	Universe.AddResource(FNephUnitsEvents());
 	
 	TickScheduleBuilder
+		.AddSystem(FNephUnitsSystems::SnapUnitsToBoard)
 		.AddSystemToStage(TEXT("Nephilim_EventCleanUpStage"), &FNephUnitsSystems::ClearEvents);
 }

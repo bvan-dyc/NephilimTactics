@@ -6,9 +6,17 @@
 #include "Units/Resource/NephUnitsEvents.h"
 #include "ArcEntityHandle.h"
 
-void FNephUnitsSystems::ClearEvents(FArcRes<FNephUnitsEvents> Events)
+void FNephUnitsSystems::SnapUnitsToBoard(FArcRes<FNephBoard> Board, FArcRes<FNephUnitsEvents> UnitEvents)
 {
-	*Events = FNephUnitsEvents();
+	for (TPair<FArcEntityHandle, TWeakObjectPtr<ANephCharacter>>& UnitCreatedEvent : UnitEvents->CharacterCreatedEvents)
+	{
+		ANephCharacter* Unit = UnitCreatedEvent.Value.Get();
+		if (!Unit) { continue; }
+
+		const FIntPoint UnitTileCoords = Board->GetTileCoordinatesAtLocation(Unit->GetActorLocation());
+		
+		Unit->SetActorLocation(Board->GetTileSnapLocation(UnitTileCoords));
+	}
 }
 
 void FNephUnitsSystems::HandlePlaceEntityOnTileCommands(const FArcUniverse& Universe, FArcRes<FNephUnitsEvents> Events, FArcRes<FNephBoard> Board)
@@ -27,4 +35,9 @@ void FNephUnitsSystems::HandlePlaceEntityOnTileCommands(const FArcUniverse& Univ
 		
 		UnitActor->SetActorLocation(Board->GetTileSnapLocation(TileAtCoordinates->TileCoordinates));
 	}
+}
+
+void FNephUnitsSystems::ClearEvents(FArcRes<FNephUnitsEvents> Events)
+{
+	*Events = FNephUnitsEvents();
 }
